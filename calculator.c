@@ -11,7 +11,7 @@ void main()
 	switch(var)
 	{
 		case 1:
-			printf("\n Addition is: %d \n",a+b);
+			printf("\n Addition of numbers of: %d \n",a+b);
 			break;
 		default:
 			printf("\n This is the default case");
