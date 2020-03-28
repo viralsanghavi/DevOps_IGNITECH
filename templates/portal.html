@@ -18,9 +18,21 @@
             <a href="{{ url_for('portal') }}" class="active">Request</a>
         </div>
         <form action="{{ url_for('portal') }}" method="post">
+            <label for="username">
+                <i class="fas fa-user"></i>
+            </label>
             <input type="text" name="name" placeholder="Enter Your Full Name" id="name">
+            <label for="username">
+                <i class="fas fa-user"></i>
+            </label>
             <input type="email" name="email" placeholder="Enter You Mail Id here" id="email">
+            <label for="username">
+                <i class="fas fa-user"></i>
+            </label>
             <input type="text" name="subject" placeholder="Subject" id="subject">
+            <label for="username">
+                <i class="fas fa-user"></i>
+            </label>
             <input type="text" name="details" placeholder="Details" id="details">
             <input type="submit" value="Send for approval">
             <div class="msg">{{ msg }}</div>

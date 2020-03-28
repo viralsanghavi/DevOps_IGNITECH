@@ -25,23 +25,37 @@
 <h2>Requests</h2>
 <div>
     <p>Approve or reject the request</p>
-    <table>
-        <tr>
-            <td>Username:</td>
-            <td>Email:</td>
-            <td>Password:</td>
-            <td>Email:</td>
-            <td></td>
-        </tr>
-        <tr>
-            <!-- {%for approval in portal%} -->
-            <th>{{ portal['name'] }}</th>
-            <th>{{ portal['email'] }}</th>
-            <th>{{ portal['subject'] }}</th>
-            <th>{{ portal['details'] }}</th>
-            <th> <button type="submit">Approve</button> <button type="submit">Reject</button> </th>
-            <!-- {%endfor%} -->
-        </tr>
-    </table>
+
+    <form class="form-group" action="{{url_for('profile')}}" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <td>Username:</td>
+                    <td>Email:</td>
+                    <td>Subject</td>
+                    <td>Details</td>
+                    <td></td>
+                </tr>
+
+            </thead>
+            <tbody>
+                {%for values in portal%}
+                <tr>
+                    <th>{{ values['name'] }}</th>
+                    <th>{{ values['email'] }}</th>
+                    <th>{{ values['subject'] }}</th>
+                    <th>{{ values['details'] }}</th>
+                    <th> {{values['approval']}}
+                    </th>
+
+                    <th>
+                        <input type="submit" name="Approve" id="1" value="Approve" />
+                        <input type="submit" name="Reject" id="0" value="Reject" />
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </form>
 </div>
 {% endblock %}

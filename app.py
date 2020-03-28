@@ -99,22 +99,40 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
-#Push the request to db
-@app.route('/portal', methods=['GET','POST'])
+# Push the request to db
+@app.route('/portal', methods=['GET', 'POST'])
 def portal():
-    msg=''
-    if request.method =="POST" and 'name' in request.form and 'email' in request.form and 'subject' in request.form and 'details' in request.form:
+    msg = ''
+    if request.method == "POST" and 'name' in request.form and 'email' in request.form and 'subject' in request.form and 'details' in request.form:
         name = request.form['name']
         email = request.form['email']
         subject = request.form['subject']
         details = request.form['details']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(
-            'INSERT INTO portal VALUES (NULL,%s,%s,%s,%s,0)',(name ,email ,subject ,details))
+            'INSERT INTO portal VALUES (NULL,%s,%s,%s,%s,0)', (name, email, subject, details))
         mysql.connection.commit()
-        msg='Request Sent'
+        msg = 'Request Sent'
 
-    return render_template('portal.html',msg=msg)
+    return render_template('portal.html', msg=msg)
+
+
+# @app.route('/profile', methods=['GET', 'POST'])
+# def approval():
+#     msg = ''
+#     if request.method == "POST" and 'id' in request.form:
+#         status = request.form['id']
+#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         if status == '1':
+#             cursor.execute('UPDATE portal SET     approval = 1 WHERE id = 2')
+#             msg = 'Approved'
+#         elif status == '0':
+#             cursor.execute('UPDATE portal SET     approval = 0 WHERE id = 2')
+#             msg = 'Rejected'
+#         mysql.connection.commit()
+
+#     return render_template('layout.html', msg=msg)
+
 
 # http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
 @app.route('/home')
@@ -125,7 +143,7 @@ def home():
         return render_template('home.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-    
+
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
 def profile():
@@ -134,13 +152,23 @@ def profile():
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', [session['id']])
-        account = cursor.fetchone()
+        account = cursor.fetchall()
         # Show the profile page with account info
-        select_stmt=('select * from portal')
+        select_stmt = ('SELECT *  FROM portal ORDER by id DESC')
         cursor.execute(select_stmt)
-        portal = cursor.fetchone()
-
-        return render_template('profile.html', account=account, portal = portal )
+        portal = cursor.fetchall()
+        msg='Data'
+    elif request.method == "POST" and 'name' in request.form and 'id' in request.form:
+        name = request.form['name']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if name == 'Approve':
+            cursor.execute('UPDATE portal SET approval = true WHERE id = 2')
+            msg = 'Approved'
+        elif name == 'Reject':
+            cursor.execute('UPDATE portal SET approval = 0 WHERE id = 2')
+            msg = 'Rejected'
+        mysql.connection.commit()
+    return render_template('profile.html', account=account, portal=portal,msg= msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -157,4 +185,4 @@ def profile():
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)
