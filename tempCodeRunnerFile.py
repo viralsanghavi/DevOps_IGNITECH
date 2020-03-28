@@ -1,3 +1,1 @@
-    else:
-                # Account doesnt exist or username/password incorrect
-        
+msg = 'Incorrect username/password!'

@@ -3,7 +3,7 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<h2>Profile Page</h2>
+<!-- <h2>Profile Page</h2>
 <div>
     <p>Your account details are below:</p>
     <table>
@@ -18,6 +18,29 @@
         <tr>
             <td>Email:</td>
             <td>{{ account['email'] }}</td>
+        </tr>
+    </table>
+</div> -->
+
+<h2>Requests</h2>
+<div>
+    <p>Approve or reject the request</p>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td>Email:</td>
+            <td>Password:</td>
+            <td>Email:</td>
+            <td></td>
+        </tr>
+        <tr>
+            <!-- {%for approval in portal%} -->
+            <th>{{ portal['name'] }}</th>
+            <th>{{ portal['email'] }}</th>
+            <th>{{ portal['subject'] }}</th>
+            <th>{{ portal['details'] }}</th>
+            <th> <button type="submit">Approve</button> <button type="submit">Reject</button> </th>
+            <!-- {%endfor%} -->
         </tr>
     </table>
 </div>

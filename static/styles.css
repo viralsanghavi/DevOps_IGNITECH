@@ -136,7 +136,7 @@ body.loggedin {
 .content > p table td, .content > div table td {
   padding: 5px;
 }
-.content > p table td:first-child, .content > div table td:first-child {
+.content > p table td:first-child, .content > div table  {
   font-weight: bold;
   color: #4a536e;
   padding-right: 15px;

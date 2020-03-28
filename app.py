@@ -47,7 +47,7 @@ def login():
         else:
             msg = 'Incorrect username/password!'
             # Account doesnt exist or username/password incorrect
-    return render_template('index.html', msg='')
+    return render_template('index.html', msg=msg)
 
 
 # http://localhost:5000/python/logout - this will be the logout page
@@ -99,6 +99,23 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
+#Push the request to db
+@app.route('/portal', methods=['GET','POST'])
+def portal():
+    msg=''
+    if request.method =="POST" and 'name' in request.form and 'email' in request.form and 'subject' in request.form and 'details' in request.form:
+        name = request.form['name']
+        email = request.form['email']
+        subject = request.form['subject']
+        details = request.form['details']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(
+            'INSERT INTO portal VALUES (NULL,%s,%s,%s,%s,0)',(name ,email ,subject ,details))
+        mysql.connection.commit()
+        msg='Request Sent'
+
+    return render_template('portal.html',msg=msg)
+
 # http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
 @app.route('/home')
 def home():
@@ -119,9 +136,24 @@ def profile():
         cursor.execute('SELECT * FROM accounts WHERE id = %s', [session['id']])
         account = cursor.fetchone()
         # Show the profile page with account info
-        return render_template('profile.html', account=account)
+        select_stmt=('select * from portal')
+        cursor.execute(select_stmt)
+        portal = cursor.fetchone()
+
+        return render_template('profile.html', account=account, portal = portal )
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+# #pushing to profile component
+# @app.route('/profile')
+# def approvings():
+#     if 'loggedin' in session:
+#         cursor1 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cursor1.execute('SELECT * FROM request where id = %s',[session['id']])
+#         portal = cursor1.fetchall()
+#         # Show the profile page with account info
+#         return render_template('profile.html',portal=portal)
+#     return redirect(url_for('login'))
 
 
 if __name__ == "__main__":
