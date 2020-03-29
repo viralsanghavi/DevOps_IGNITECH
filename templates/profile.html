@@ -26,36 +26,44 @@
 <div>
     <p>Approve or reject the request</p>
 
-    <form class="form-group" action="{{url_for('profile')}}" method="POST">
-        <table>
-            <thead>
-                <tr>
-                    <td>Username:</td>
-                    <td>Email:</td>
-                    <td>Subject</td>
-                    <td>Details</td>
-                    <td></td>
-                </tr>
+    <table>
+        <thead>
+            <tr>
+                <td>Username:</td>
+                <td>Email:</td>
+                <td>Subject</td>
+                <td>Details</td>
+                <td>Status</td>
+                <td>Approve</td>
+                <td>Reject</td>
 
-            </thead>
-            <tbody>
-                {%for values in portal%}
-                <tr>
-                    <th>{{ values['name'] }}</th>
-                    <th>{{ values['email'] }}</th>
-                    <th>{{ values['subject'] }}</th>
-                    <th>{{ values['details'] }}</th>
-                    <th> {{values['approval']}}
-                    </th>
+            </tr>
 
-                    <th>
-                        <input type="submit" name="Approve" id="1" value="Approve" />
-                        <input type="submit" name="Reject" id="0" value="Reject" />
-                    </th>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-    </form>
+        </thead>
+        <tbody>
+            {%for values in portal%}
+            <tr>
+                <th>{{ values['name'] }}</th>
+                <th>{{ values['email'] }}</th>
+                <th>{{ values['subject'] }}</th>
+                <th>{{ values['details'] }}</th>
+                <th>
+                    {% if values['approval'] == True %}
+                    <p>Accepted</p>
+                    {% else %}
+                    <p>Pending</p>
+                    {% endif %}
+                </th>
+                <form class="form-group" action="{{url_for('profile')}}" method="POST">
+
+                    <td align="center"><a href="{{ url_for('approving', aname=values['name'], aid=values['id']) }}"><i
+                                class="fa fa-check"></a></td>
+                    <td align="center"><a href="{{ url_for('approving', aname=values['name'], aid=values['id'])}}"><i
+                                class="fa fa-ban"></a></td>
+                </form>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

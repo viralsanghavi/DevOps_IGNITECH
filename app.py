@@ -145,7 +145,7 @@ def home():
     return redirect(url_for('login'))
 
 # http://localhost:5000/pythinlogin/profile - this will be the profile page, only accessible for loggedin users
-@app.route('/profile')
+@app.route('/profile', methods=['POST', 'GET'])
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -154,34 +154,38 @@ def profile():
         cursor.execute('SELECT * FROM accounts WHERE id = %s', [session['id']])
         account = cursor.fetchall()
         # Show the profile page with account info
-        select_stmt = ('SELECT *  FROM portal ORDER by id DESC')
+        select_stmt = (
+            'SELECT *  FROM portal where approval = 0 ORDER by id DESC ')
         cursor.execute(select_stmt)
         portal = cursor.fetchall()
-        msg='Data'
-    elif request.method == "POST" and 'name' in request.form and 'id' in request.form:
-        name = request.form['name']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        if name == 'Approve':
-            cursor.execute('UPDATE portal SET approval = true WHERE id = 2')
-            msg = 'Approved'
-        elif name == 'Reject':
-            cursor.execute('UPDATE portal SET approval = 0 WHERE id = 2')
-            msg = 'Rejected'
-        mysql.connection.commit()
-    return render_template('profile.html', account=account, portal=portal,msg= msg)
+        # msg = 'Data'
+    # if request.method == "POST" and 'name' in request.form and 'id' in request.form:
+    #     name = request.form['name']
+    #     if name == 'Approve':
+    #         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    #         cursor.execute('UPDATE portal SET approval = 1 WHERE id = 1')
+    #         # elif name == 'Reject':
+    #         #     cursor.execute('UPDATE portal SET approval = 0 WHERE id = 1')
+    #         #     msg = 'Rejected'
+    #     mysql.connection.commit()
+    return render_template('profile.html', account=account, portal=portal)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-# #pushing to profile component
-# @app.route('/profile')
-# def approvings():
-#     if 'loggedin' in session:
-#         cursor1 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor1.execute('SELECT * FROM request where id = %s',[session['id']])
-#         portal = cursor1.fetchall()
-#         # Show the profile page with account info
-#         return render_template('profile.html',portal=portal)
-#     return redirect(url_for('login'))
+
+@app.route('/approving', methods=['POST', 'GET'])
+def approving():
+    if request.method == "GET":
+        aname = request.args.get('aname')
+        aid=request.args.get('aid')
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE portal SET approval = 1 WHERE name = %s and id = %s',[aname,aid])
+        # elif name == 'Reject':
+        #     cursor.execute('UPDATE portal SET approval = 0 WHERE id = 1')
+        #     msg = 'Rejected'
+        mysql.connection.commit()
+        # msg = 'Approved'
+    return redirect(url_for('profile'))
 
 
 if __name__ == "__main__":
