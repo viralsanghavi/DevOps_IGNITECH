@@ -55,11 +55,8 @@
                     {% endif %}
                 </th>
                 <form class="form-group" action="{{url_for('profile')}}" method="POST">
-
                     <td align="center"><a href="{{ url_for('approving', aname=values['name'], aid=values['id']) }}"><i
                                 class="fa fa-check"></a></td>
-                    <td align="center"><a href="{{ url_for('approving', aname=values['name'], aid=values['id'])}}"><i
-                                class="fa fa-ban"></a></td>
                 </form>
             </tr>
             {%endfor%}
