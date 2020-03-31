@@ -158,6 +158,10 @@ def profile():
             'SELECT *  FROM portal where approval = 0 ORDER by id DESC ')
         cursor.execute(select_stmt)
         portal = cursor.fetchall()
+        approval_statement = (
+            'SELECT *  FROM portal where approval = 1 ORDER by id DESC ')
+        cursor.execute(approval_statement)
+        account = cursor.fetchall()
         # msg = 'Data'
     # if request.method == "POST" and 'name' in request.form and 'id' in request.form:
     #     name = request.form['name']

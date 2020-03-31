@@ -29,8 +29,8 @@
     <table>
         <thead>
             <tr>
-                <td>Username:</td>
-                <td>Email:</td>
+                <td>Username</td>
+                <td>Email</td>
                 <td>Subject</td>
                 <td>Details</td>
                 <td>Status</td>
@@ -58,6 +58,62 @@
                     <td align="center"><a href="{{ url_for('approving', aname=values['name'], aid=values['id']) }}"><i
                                 class="fa fa-check"></a></td>
                 </form>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block approvedcontent %}
+<!-- <h2>Profile Page</h2>
+<div>
+    <p>Your account details are below:</p>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td>{{ account['username'] }}</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>{{ account['password'] }}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{ account['email'] }}</td>
+        </tr>
+    </table>
+</div> -->
+
+<h2>Requests</h2>
+<div>
+    <p>Approve or reject the request</p>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Username</td>
+                <td>Email</td>
+                <td>Subject</td>
+                <td>Details</td>
+                <td>Status</td>
+            </tr>
+
+        </thead>
+        <tbody>
+            {%for values in account%}
+            <tr>
+                <th>{{ values['name'] }}</th>
+                <th>{{ values['email'] }}</th>
+                <th>{{ values['subject'] }}</th>
+                <th>{{ values['details'] }}</th>
+                <th>
+                    {% if values['approval'] == True %}
+                    <p>Accepted</p>
+                    {% else %}
+                    <p>Pending</p>
+                    {% endif %}
+                </th>
             </tr>
             {%endfor%}
         </tbody>
